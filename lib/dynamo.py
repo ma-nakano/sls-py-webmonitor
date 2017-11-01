@@ -15,7 +15,7 @@ def create_site(event,context):
 
 def get_sites(event,context): 
     """
-		Get Site Data in DynamoDB
+		Get ALL Site Data in DynamoDB
 		"""
 
 		return sites
@@ -35,3 +35,14 @@ def update_site_state(event,context):
 		"""
 
 		pass
+
+
+
+
+##This area is ready this method content 
+##--start code## 
+##import  requests
+##url="https://hogehoge.com"
+##b=requests.get(url)
+##b.status_code
+
