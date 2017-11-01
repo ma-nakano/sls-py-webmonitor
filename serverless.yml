@@ -1,4 +1,4 @@
-service: nakano-pymonitor
+service: sls-py-webmonitor
 
 custom:
   stage: ${opt:stage, self:provider.stage}
