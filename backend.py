@@ -4,17 +4,24 @@ from requests import get, RequestException
 
 
 def trigger():
+    """
+    get_sites()で取得したsiteをcheck_site()に渡す
+    """
     for site in get_sites():
         check_site(site)
 
     return {"message": "Trigger Succeeded"}
 
 
-def probe(event):
-    response = get(event.url)
+def probe(site, context):
+    """
+    eventからsiteを受け取りstatusを確認する
+    必要であればdbに更新・登録し，snsに通知する
+    """
+    response = get(site.url)
 
     array = {
-        "site": event,
+        "site": site,
         "date": response.headers["Date"],
         "state": "OK",
         "code": response.status_code,
@@ -22,6 +29,8 @@ def probe(event):
     }
 
 
-
 def sns(event):
+    """
+    snsに通知する
+    """
     pass
