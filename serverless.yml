@@ -48,6 +48,17 @@ functions:
           method: post
           cors: true
           private: ${self:custom.private}
+  remove:
+    handler: handler.remove
+    name: ${self:custom.func_prefix}-remove
+    description: "${self:service}: Remove target website from DynamoDB"
+    events:
+      - http:
+          path: sites/remove
+          method: post
+          cors: true
+          private: ${self:custom.private}
+
 
 resources:
   Resources:

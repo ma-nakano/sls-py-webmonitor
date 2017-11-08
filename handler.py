@@ -1,4 +1,4 @@
-from lib.dynamo import get_sites, create_site
+from lib.dynamo import get_sites, create_site, remove_site
 from urllib.parse import parse_qs
 import requirements
 from jinja2 import Environment, FileSystemLoader
@@ -52,4 +52,15 @@ def remove(event, context):
     /removeにpostされたidをremove_site()に渡し
     /にリダイレクトする
     """
-    pass
+    body = parse_qs(event["body"])
+
+    remove_site(body["id"][0])
+
+    response = {
+        "statusCode": 302,
+        "headers": {
+            'Location': './',
+        }
+    }
+
+    return response
