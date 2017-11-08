@@ -2,7 +2,7 @@ from uuid import uuid1
 import boto3
 
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('')
+table = dynamodb.Table('nagashima-serverless')
 
 
 def create_site(event, context):
@@ -10,8 +10,8 @@ def create_site(event, context):
     :param dict event:{"name": "foo.com", "url": "https://foo.com"}
     Put Site Data in DynamoDB
     """
-    pass
-
+    responce = table.scan()
+    return responce["Items"];
 
 def get_sites(event, context):
     """
