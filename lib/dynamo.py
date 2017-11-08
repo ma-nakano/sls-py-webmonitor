@@ -7,21 +7,13 @@ dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table(os.environ["SITE_TABLE_NAME"])
 
 
-def create_site(event, context):
+def create_site(site):
     """
     :param dict event:{"name": "foo.com", "url": "https://foo.com"}
     Put Site Data in DynamoDB
     """
-    id=uuid.uuid1()
-		table.put_item(
-    		Item={
-        	'site':'piyopiyo.inc',
-        	'id':str(id),
-        	'url':'htttps://piyopiyo.com',
-        	'status':200, 
-    		}
-		)
-
+    site["id"] = str(uuid1())
+    table.put_item(Item=site)
 
 
 def get_sites():

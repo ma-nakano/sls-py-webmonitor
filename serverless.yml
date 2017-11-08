@@ -38,6 +38,16 @@ functions:
           method: get
           cors: true
           private: ${self:custom.private}
+  register:
+    handler: handler.register
+    name: ${self:custom.func_prefix}-register
+    description: "${self:service}: Register target website to DynamoDB"
+    events:
+      - http:
+          path: sites/register
+          method: post
+          cors: true
+          private: ${self:custom.private}
 
 resources:
   Resources:
