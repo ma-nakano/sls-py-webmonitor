@@ -5,6 +5,9 @@ from jinja2 import Environment, FileSystemLoader
 
 
 def dashboard(event, context):
+    """
+    /のhtmlを生成する
+    """
     env = Environment(loader=FileSystemLoader("./html", encoding="utf-8"))
     tpl = env.get_template("index.html")
 
@@ -23,6 +26,10 @@ def dashboard(event, context):
 
 
 def register(event, context):
+    """
+    /registerにpostされたnameとurlをcreate_site()に渡し
+    /にリダイレクトする
+    """
     params = event["body"]
     site = {"name": params["name"], "url": params["url"]}
 
@@ -39,14 +46,8 @@ def register(event, context):
 
 
 def remove(event, context):
-    pass
-
-
-def trigger(event, context):
     """
-    Invoke probe function.
-    :param event:
-    :param context:
-    :return:
+    /removeにpostされたidをremove_site()に渡し
+    /にリダイレクトする
     """
     pass
