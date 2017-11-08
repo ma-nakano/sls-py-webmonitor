@@ -1,8 +1,10 @@
 from uuid import uuid1
 import boto3
+import os
+import json
 
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('nagashima-serverless')
+table = dynamodb.Table(os.environ["SITE_TABLE_NAME"])
 
 
 def create_site(event, context):
@@ -10,14 +12,15 @@ def create_site(event, context):
     :param dict event:{"name": "foo.com", "url": "https://foo.com"}
     Put Site Data in DynamoDB
     """
-    responce = table.scan()
-    return responce["Items"];
+    pass
 
-def get_sites(event, context):
+
+def get_sites():
     """
     Get ALL Site Data in DynamoDB
     """
-    pass
+    response = table.scan()
+    return response["Items"]
 
 
 def remove_site(event, context):
