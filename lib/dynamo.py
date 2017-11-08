@@ -28,7 +28,7 @@ def remove_site(event, context):
     """
     Remove Site Data in DynamoDB
     """
-    pass
+    table.delete_item('id':'')
 
 
 def update_site_state(event, context):
