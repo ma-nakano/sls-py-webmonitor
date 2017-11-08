@@ -30,8 +30,10 @@ def register(event, context):
     /registerにpostされたnameとurlをcreate_site()に渡し
     /にリダイレクトする
     """
-    params = event["body"]
-    site = {"name": params["name"], "url": params["url"]}
+
+    body = parse_qs(event["body"])
+
+    site = {"name": body["name"][0], "url": body["url"][0]}
 
     create_site(site)
 
