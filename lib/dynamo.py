@@ -12,7 +12,16 @@ def create_site(event, context):
     :param dict event:{"name": "foo.com", "url": "https://foo.com"}
     Put Site Data in DynamoDB
     """
-    pass
+    id=uuid.uuid1()
+		table.put_item(
+    		Item={
+        	'site':'piyopiyo.inc',
+        	'id':str(id),
+        	'url':'htttps://piyopiyo.com',
+        	'status':200, 
+    		}
+		)
+
 
 
 def get_sites():
