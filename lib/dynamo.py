@@ -24,11 +24,11 @@ def get_sites():
     return response["Items"]
 
 
-def remove_site(event, context):
+def remove_site(id):
     """
     Remove Site Data in DynamoDB
     """
-    table.delete_item('id':'')
+    table.delete_item(Key={"id": id})
 
 
 def update_site_state(event, context):
