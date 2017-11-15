@@ -1,6 +1,8 @@
-from lib.dynamo import get_sites, create_site, remove_site
 from urllib.parse import parse_qs
+from uuid import uuid1
 import requirements
+import lib.dynamo as dynamo
+import lib.backend as backend
 from jinja2 import Environment, FileSystemLoader
 
 
@@ -11,7 +13,7 @@ def dashboard(event, context):
     env = Environment(loader=FileSystemLoader("./html", encoding="utf-8"))
     tpl = env.get_template("index.html")
 
-    html = tpl.render({"sites": get_sites()})
+    html = tpl.render({"sites": dynamo.get_sites_data()})
 
     response = {
         "statusCode": 200,
@@ -27,15 +29,20 @@ def dashboard(event, context):
 
 def register(event, context):
     """
-    /registerにpostされたnameとurlをcreate_site()に渡し
+    /registerにpostされたnameとurlをDBに登録し
     /にリダイレクトする
     """
 
     body = parse_qs(event["body"])
 
-    site = {"name": body["name"][0], "url": body["url"][0]}
+    site = {
+        "id": str(uuid1()),
+        "name": body["name"][0],
+        "url": body["url"][0],
+        "code": backend.probe(body["url"][0])
+    }
 
-    create_site(site)
+    dynamo.put_site(site)
 
     response = {
         "statusCode": 302,
@@ -54,7 +61,7 @@ def remove(event, context):
     """
     body = parse_qs(event["body"])
 
-    remove_site(body["id"][0])
+    dynamo.remove_site(body["id"][0])
 
     response = {
         "statusCode": 302,
