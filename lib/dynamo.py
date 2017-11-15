@@ -1,22 +1,19 @@
-from uuid import uuid1
 import boto3
 import os
-import json
 
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table(os.environ["SITE_TABLE_NAME"])
 
 
-def create_site(site):
+def put_site(site):
     """
-    :param dict event:{"name": "foo.com", "url": "https://foo.com"}
+    :param dict site:{"name": "foo.com", "url": "https://foo.com"}
     Put Site Data in DynamoDB
     """
-    site["id"] = str(uuid1())
     table.put_item(Item=site)
 
 
-def get_sites():
+def get_sites_data():
     """
     Get ALL Site Data in DynamoDB
     """
@@ -31,8 +28,17 @@ def remove_site(id):
     table.delete_item(Key={"id": id})
 
 
-def update_site_state(event, context):
+def update_site(uuid, new_code):
     """
     Update Site Data
     """
-    pass
+
+    table.update_item(
+        Key={
+            'id': uuid,
+        },
+        UpdateExpression='SET code = :val1',
+        ExpressionAttributeValues={
+            ':val1': new_code
+        }
+    )
