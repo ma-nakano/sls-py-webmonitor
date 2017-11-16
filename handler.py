@@ -13,7 +13,7 @@ def dashboard(event, context):
     env = Environment(loader=FileSystemLoader("./html", encoding="utf-8"))
     tpl = env.get_template("index.html")
 
-    html = tpl.render({"sites": dynamo.get_sites_data()})
+    html = tpl.render({"sites": dynamo.get_sites()})
 
     response = {
         "statusCode": 200,
@@ -35,6 +35,7 @@ def register(event, context):
 
     body = parse_qs(event["body"])
 
+    # siteの定義
     site = {
         "id": str(uuid1()),
         "name": body["name"][0],
