@@ -1,6 +1,6 @@
-import requests as req
 import requirements
 import lib.dynamo as dynamo
+import requests as req
 import os
 
 
@@ -13,7 +13,7 @@ def probe(url):
     return response.status_code
 
 
-def check_sites():
+def check_sites(event,context):
     sites = dynamo.get_sites()
 
     for site in sites:
