@@ -13,7 +13,7 @@ def put_site(site):
     table.put_item(Item=site)
 
 
-def get_sites_data():
+def get_sites():
     """
     Get ALL Site Data in DynamoDB
     """
@@ -32,7 +32,6 @@ def update_site(uuid, new_code):
     """
     Update Site Data
     """
-
     table.update_item(
         Key={
             'id': uuid,

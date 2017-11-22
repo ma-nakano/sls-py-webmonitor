@@ -58,6 +58,12 @@ functions:
           method: post
           cors: true
           private: ${self:custom.private}
+  check_sites:
+    handler: lib/backend.check_sites
+    name: ${self:custom.func_prefix}-check_sites
+    description: "${self:service}: Check status code of each sites"
+    events:
+      - schedule: rate(5 minutes)
 
 
 resources:
