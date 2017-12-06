@@ -22,11 +22,15 @@ provider:
       Action:
         - "dynamodb:*"
       Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.SITE_TABLE_NAME}"
+    - Effect: "Allow"
+      Action:
+        - "sns:Publish"
+      Resource: "${self:resources.Outputs.SitesSNSTopicArn.Value}"
   environment:
     SERVERLESS_PROJECT: ${self:service}
     SERVERLESS_STAGE: ${self:custom.stage}
     SITE_TABLE_NAME: ${self:service}-sites-${self:custom.stage}
-
+    SNS_TOPIC_ARN: ${self:resources.Outputs.SitesSNSTopicArn.Value}
 functions:
   dashboard:
     handler: handler.dashboard
@@ -64,7 +68,12 @@ functions:
     description: "${self:service}: Check status code of each sites"
     events:
       - schedule: rate(5 minutes)
-
+  sns:
+    handler: lib/backend.sns
+    name: ${self:custom.func_prefix}-sns
+    description: "${self:service}: Notify when website's status is changed"
+    #environment:
+    #  SNS_TOPIC_ARN: ${self:resources.Outputs.SitesSNSTopicArn.Value}
 
 resources:
   Resources:
@@ -83,4 +92,11 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
 
-
+    SitesSNS:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: ${self:service}-${self:custom.stage}
+        DisplayName: "Serverless Web Monitor"
+  Outputs:
+    SitesSNSTopicArn:
+      Value: {Ref: SitesSNS}
