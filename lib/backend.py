@@ -7,9 +7,13 @@ import os
 
 def probe(url):
     """
-    urlからステータスコードを取得する
+    urlからステータスコードを取得して返す
+    例外が発生した場合例外クラスのクラス名を返す
     """
-    response = req.get(url, headers={'User-Agent': os.environ["SERVERLESS_PROJECT"]})
+    try:
+        response = req.get(url, headers={'User-Agent': os.environ["SERVERLESS_PROJECT"]})
+    except req.exceptions.RequestException as e:
+        return e.__class__.__name__
 
     return response.status_code
 
@@ -17,17 +21,18 @@ def probe(url):
 def check_sites(event, context):
     sites = dynamo.get_sites()
     for site in sites:
-        status_code = probe(site["url"])
+        status = probe(site["url"])
 
-        if status_code != site["code"]:
-            dynamo.update_site(site["id"], status_code)
+        if status != site["code"]:
+            dynamo.update_site(site["id"], status)
             sns(site["id"])
-            print (site)
+            print(site)
+
 
 def sns(event):
     client = boto3.client('sns')
 
-    response = client.publish(
+    client.publish(
         TopicArn=os.environ["SNS_TOPIC_ARN"],
         Message='it is test',
         Subject='Test!',
