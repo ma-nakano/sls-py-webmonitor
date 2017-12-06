@@ -21,11 +21,11 @@ def get_sites():
     return response["Items"]
 
 
-def remove_site(id):
+def remove_site(uuid):
     """
     Remove Site Data in DynamoDB
     """
-    table.delete_item(Key={"id": id})
+    table.delete_item(Key={"id": uuid})
 
 
 def update_site(uuid, new_code):

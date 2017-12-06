@@ -8,7 +8,7 @@ from jinja2 import Environment, FileSystemLoader
 
 def dashboard(event, context):
     """
-    /のhtmlを生成する
+    ダッシュボードのhtmlを生成する
     """
     env = Environment(loader=FileSystemLoader("./html", encoding="utf-8"))
     tpl = env.get_template("index.html")
@@ -32,7 +32,6 @@ def register(event, context):
     /registerにpostされたnameとurlをDBに登録し
     /にリダイレクトする
     """
-
     body = parse_qs(event["body"])
 
     # siteの定義

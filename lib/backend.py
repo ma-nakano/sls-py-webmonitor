@@ -3,6 +3,7 @@ import boto3
 import lib.dynamo as dynamo
 import requests as req
 import os
+from datetime import datetime
 
 
 def probe(url):
@@ -21,19 +22,27 @@ def probe(url):
 def check_sites(event, context):
     sites = dynamo.get_sites()
     for site in sites:
-        status = probe(site["url"])
+        new_status = probe(site["url"])
 
-        if status != site["code"]:
-            dynamo.update_site(site["id"], status)
-            sns(site["id"])
+        if new_status != site["code"] and new_status != 200:
+            dynamo.update_site(site["id"], new_status)
+            sns(None, site, new_status)
             print(site)
 
 
-def sns(event):
+def sns(event, site, new_status):
+    url = site["url"]
+    old_status = site["code"]
+    time = datetime.now()
+
+    message = f"""\
+    Warning! {url} status changed from {old_status} to {new_status} at {time}.
+    """
+
     client = boto3.client('sns')
 
     client.publish(
         TopicArn=os.environ["SNS_TOPIC_ARN"],
-        Message='it is test',
+        Message=message,
         Subject='Test!',
     )
