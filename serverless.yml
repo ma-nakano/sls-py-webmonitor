@@ -1,4 +1,4 @@
-service: sls-py-webmonitor
+service: sls-py-webmonitor-nagashima
 
 custom:
   stage: ${opt:stage, self:provider.stage}

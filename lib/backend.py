@@ -45,5 +45,5 @@ def sns(event, site, new_status):
     client.publish(
         TopicArn=os.environ["SNS_TOPIC_ARN"],
         Message=message,
-        Subject='Test!',
+        Subject='Status Changed',
     )
