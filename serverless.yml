@@ -1,4 +1,4 @@
-service: sls-py-webmonitor
+service: sls-py-webmonitor-nagashima
 
 custom:
   stage: ${opt:stage, self:provider.stage}
@@ -79,7 +79,8 @@ resources:
         KeySchema:
           - AttributeName: id
             KeyType: HASH
-        #ProvisionedThroughput:
-        #	ReadCapacityUnits: 1
-				#	WriteCapacityUnits: 1
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
 
