@@ -1,6 +1,7 @@
-import requests as req
 import requirements
+import boto3
 import lib.dynamo as dynamo
+import requests as req
 import os
 
 
@@ -13,18 +14,21 @@ def probe(url):
     return response.status_code
 
 
-def check_sites():
+def check_sites(event, context):
     sites = dynamo.get_sites()
-
     for site in sites:
         status_code = probe(site["url"])
 
         if status_code != site["code"]:
             dynamo.update_site(site["id"], status_code)
-
+            sns(site["id"])
+            print (site)
 
 def sns(event):
-    """
-    snsに通知する
-    """
-    pass
+    client = boto3.client('sns')
+
+    response = client.publish(
+        TopicArn=os.environ["SNS_TOPIC_ARN"],
+        Message='it is test',
+        Subject='Test!',
+    )
