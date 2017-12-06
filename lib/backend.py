@@ -24,9 +24,10 @@ def check_sites(event, context):
     for site in sites:
         new_status = probe(site["url"])
 
-        if new_status != site["code"] and new_status != 200:
+        if new_status != site["code"]:
             dynamo.update_site(site["id"], new_status)
-            sns(None, site, new_status)
+            if new_status != 200:
+                sns(None, site, new_status)
             print(site)
 
 
